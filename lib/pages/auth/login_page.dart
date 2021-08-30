@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -12,6 +13,9 @@ class _State extends State<LogInPage> {
   final form = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  // validating the datas
+  final String email = "jamesmemba2000@gmail.com";
+  final String password = "jamesmemba";
 
   changeVisibility() {
     setState(() {
@@ -53,6 +57,9 @@ class _State extends State<LogInPage> {
                     if (value!.isEmpty) {
                       return "password is required";
                     }
+                    if (value.length < 8) {
+                      return "the password should contain at least eight characters long";
+                    }
                     return null;
                   },
                   keyboardType: TextInputType.text,
@@ -82,8 +89,26 @@ class _State extends State<LogInPage> {
                               if (form.currentState!.validate()) {
                                 print(emailController.text);
                                 print(passwordController.text);
-                                Navigator.of(context).pushNamed("home_page");
-                                
+                                //validating email
+                                if (!EmailValidator.validate(
+                                    emailController.text)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("invalid email address")));
+                                  return;
+                                }
+                                //validation of the email
+                                if (emailController.text == email &&
+                                    passwordController.text == password) {
+                                  //navigate to home page if the conditio
+                                  Navigator.of(context).pushNamed("home_page");
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("invalid credentials")));
+                                }
                               }
                             },
                             child: Text("login"))),
