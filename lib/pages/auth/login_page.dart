@@ -1,5 +1,7 @@
+import 'package:auntie_rafiki/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/provider.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -14,8 +16,6 @@ class _State extends State<LogInPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   // validating the datas
-  final String email = "jamesmemba2000@gmail.com";
-  final String password = "jamesmemba";
 
   changeVisibility() {
     setState(() {
@@ -25,6 +25,8 @@ class _State extends State<LogInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -99,16 +101,21 @@ class _State extends State<LogInPage> {
                                   return;
                                 }
                                 //validation of the email
-                                if (emailController.text == email &&
-                                    passwordController.text == password) {
-                                  //navigate to home page if the conditio
-                                  Navigator.of(context).pushNamed("home_page");
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text("invalid credentials")));
-                                }
+                                authProvider
+                                    .login(
+                                        email: emailController.text,
+                                        password: passwordController.text)
+                                    .then((value) {
+                                  if (value) {
+                                    Navigator.of(context)
+                                        .pushNamed("home_page");
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text("invalid credentials")));
+                                  }
+                                });
                               }
                             },
                             child: Text("login"))),

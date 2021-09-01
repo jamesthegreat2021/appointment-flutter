@@ -39,6 +39,17 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
+              /* leading: CircleAvatar(
+              backgroundColor: Colors.white,
+              ),*/
+              
+              leading: Icon(Icons.ac_unit_sharp),
+              title: Text("Events"),
+              onTap: () {
+                Navigator.of(context).pushNamed("events");
+              },
+            ),
+            ListTile(
                 /* leading: CircleAvatar(
               backgroundColor: Colors.white,
               ),*/

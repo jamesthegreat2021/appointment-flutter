@@ -10,7 +10,7 @@ class AuthProvider extends ChangeNotifier {
   User? user;
   bool isLoggedIn = false;
 
-  Future<void> login({required String email, required String password}) async {
+  Future<bool> login({required String email, required String password}) async {
     isLoggedIn = false;
     notifyListeners();
     //log in function of the user
@@ -19,5 +19,6 @@ class AuthProvider extends ChangeNotifier {
       isLoggedIn = true;
     }
     notifyListeners();
+    return isLoggedIn;
   }
 }
